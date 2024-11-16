@@ -83,10 +83,6 @@ namespace CrusherCoreBoost.Patches
                 CrusherCoreBoostPlugin.Instance.SharedLogger.LogError("Unable to update CrusherInstance.UpdateCrafting(). The code has likely changed.");
             }
 
-#if DEBUG
-            CrusherCoreBoostPlugin.Instance.LogIl(instructions);
-#endif
-
             return instructions;
         }
     }
