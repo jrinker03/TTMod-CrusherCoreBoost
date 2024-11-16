@@ -34,43 +34,30 @@ namespace CrusherCoreBoost.Patches
             CodeMatcher codeMatcher = new CodeMatcher(instructions).Start();
             bool foundInsertPoint = false;
 
-            // Since it's a nice landmark, search for Label 6.  Once we find it, ensure the opcodes from there to the insertion point are as above.  If not, don't update.
-            while (codeMatcher.IsValid && 
-                codeMatcher.Instruction.labels != null && 
-                (codeMatcher.Instruction.labels.Count == 0 || 
-                 codeMatcher.Instruction.labels[0].GetHashCode() != 6))
+            FieldInfo progressFieldInfo = typeof(CrusherInstance).GetField(nameof(CrusherInstance.progress));
+            CodeMatch[] toMatch = new CodeMatch[]
             {
-                codeMatcher.Advance(1);
-            }
+                new CodeMatch(OpCodes.Ldarg_0),
+                new CodeMatch(OpCodes.Ldarg_0),
+                new CodeMatch(OpCodes.Ldfld, progressFieldInfo),
+                new CodeMatch(OpCodes.Ldarg_1),
+            };
 
-            if (codeMatcher.IsValid && codeMatcher.Instruction.opcode == OpCodes.Ldarg_0)
-            {
-                codeMatcher.Advance(1);
+            codeMatcher.MatchForward(true, toMatch).Advance(1);
 
-                if (codeMatcher.IsValid && codeMatcher.Instruction.opcode == OpCodes.Ldarg_0)
+            if (codeMatcher.IsValid)
+            { 
+                // At this point, we're very likely where we want to update the code.
+                foundInsertPoint = true;
+
+                FieldInfo fieldInfo = typeof(TechTreeStatePatches).GetField(nameof(TechTreeStatePatches.crusherSpeedMultiplier), BindingFlags.NonPublic | BindingFlags.Static);
+                CodeInstruction[] newInstructions = new CodeInstruction[]
                 {
-                    codeMatcher.Advance(1);
-                    if (codeMatcher.IsValid && codeMatcher.Instruction.opcode == OpCodes.Ldfld)
-                    {
-                        codeMatcher.Advance(1);
-                        if (codeMatcher.IsValid && codeMatcher.Instruction.opcode == OpCodes.Ldarg_1)
-                        {
-                            codeMatcher.Advance(1);
-                            // At this point, we're very likely where we want to update the code.
-                            foundInsertPoint = true;
+                    new CodeInstruction(OpCodes.Ldsfld, fieldInfo),
+                    new CodeInstruction(OpCodes.Mul),
+                };
 
-                            FieldInfo fieldInfo = typeof(TechTreeStatePatches).GetField(nameof(TechTreeStatePatches.crusherSpeedMultiplier), BindingFlags.NonPublic | BindingFlags.Static);
-
-                            CodeInstruction[] newInstructions = new CodeInstruction[]
-                            {
-                                new CodeInstruction(OpCodes.Ldsfld, fieldInfo),
-                                new CodeInstruction(OpCodes.Mul),
-                            };
-
-                            codeMatcher.Insert(newInstructions);
-                        }
-                    }
-                }
+                codeMatcher.Insert(newInstructions);
             }
 
             if (foundInsertPoint)
