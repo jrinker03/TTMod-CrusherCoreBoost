@@ -5,6 +5,9 @@ using System.Reflection.Emit;
 
 namespace CrusherCoreBoost.Patches
 {
+    /// <summary>
+    /// Transpiler to patch CrusherInstance.UpdateCrafting to add a potential bonus for core clusters.
+    /// </summary>
     [HarmonyPatch(typeof(CrusherInstance))]
     [HarmonyPatch("UpdateCrafting")]
     public class CrusherInstance_UpdateCrafting_Patch
@@ -28,11 +31,10 @@ namespace CrusherCoreBoost.Patches
             */
             //  We want to change it to execute this instead: progress += dt * crusherSpeedMultiplier / currentRecipe.duration;
 
-            // Since it's a nice landmark, search for Label 6.  Once we find it, ensure the opcodes at and following are as above.  If not, don't update.
-
             CodeMatcher codeMatcher = new CodeMatcher(instructions).Start();
             bool foundInsertPoint = false;
 
+            // Since it's a nice landmark, search for Label 6.  Once we find it, ensure the opcodes from there to the insertion point are as above.  If not, don't update.
             while (codeMatcher.IsValid && 
                 codeMatcher.Instruction.labels != null && 
                 (codeMatcher.Instruction.labels.Count == 0 || 
@@ -57,12 +59,13 @@ namespace CrusherCoreBoost.Patches
                             // At this point, we're very likely where we want to update the code.
                             foundInsertPoint = true;
 
-
                             FieldInfo fieldInfo = typeof(TechTreeStatePatches).GetField(nameof(TechTreeStatePatches.crusherSpeedMultiplier), BindingFlags.NonPublic | BindingFlags.Static);
 
-                            CodeInstruction[] newInstructions = new CodeInstruction[2];
-                            newInstructions[0] = new CodeInstruction(OpCodes.Ldsfld, fieldInfo);
-                            newInstructions[1] = new CodeInstruction(OpCodes.Mul);
+                            CodeInstruction[] newInstructions = new CodeInstruction[]
+                            {
+                                new CodeInstruction(OpCodes.Ldsfld, fieldInfo),
+                                new CodeInstruction(OpCodes.Mul),
+                            };
 
                             codeMatcher.Insert(newInstructions);
                         }
