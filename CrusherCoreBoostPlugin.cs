@@ -75,7 +75,7 @@ namespace CrusherCoreBoost
             EMUAdditions.AddNewUnlock(new NewUnlockDetails()
             {
                 displayName = UnlockDisplayName,
-                description = "Increase speed of all Crushers by 0.05% per Core Cluster.",
+                description = "Increase speed of all Crushers by 0.10% per Core Cluster.",
                 category = Unlock.TechCategory.Science,
                 requiredTier = TechTreeState.ResearchTier.Tier25,
                 coreTypeNeeded = ResearchCoreDefinition.CoreType.Gold,
