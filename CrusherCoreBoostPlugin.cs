@@ -11,7 +11,7 @@ namespace CrusherCoreBoost
     [BepInPlugin(MyGUID, PluginName, VersionString)]
     public class CrusherCoreBoostPlugin : BaseUnityPlugin
     {
-        private const string MyGUID = "com.james.CrusherCoreBoost";
+        private const string MyGUID = "com.jrinker03.CrusherCoreBoost";
         private const string PluginName = "CrusherCoreBoost";
         private const string VersionString = "1.0.0";
         private const string UnlockDisplayName = "Core Boost (Crusher)";
