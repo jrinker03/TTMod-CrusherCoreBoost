@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CrusherCoreBoostPlugin.cs" />
+    <Compile Include="Patches\CrusherInspector_Set_Patch.cs" />
     <Compile Include="Patches\CrusherInstance_UpdateCrafting_Patch.cs" />
     <Compile Include="Patches\TechTreeStatePatches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

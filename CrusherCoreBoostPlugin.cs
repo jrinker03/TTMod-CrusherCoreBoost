@@ -14,7 +14,7 @@ namespace CrusherCoreBoost
         private const string MyGUID = "com.jrinker03.CrusherCoreBoost";
         private const string PluginName = "CrusherCoreBoost";
         private const string VersionString = "1.0.0";
-        private const string UnlockDisplayName = "Core Boost (Crusher)";
+        private const string UnlockDisplayName = "Core Boost (Crushing)";
 
         private static readonly Harmony Harmony = new Harmony(MyGUID);
 
@@ -66,7 +66,7 @@ namespace CrusherCoreBoost
 
         private void CreateConfigEntries()
         {
-            CoresToUnlock = Config.Bind("General", "Cores To Unlock", 250, new ConfigDescription("How many yellow cores required to unlock 'Core Boost (Crusher)' in Tech Tree."));
+            CoresToUnlock = Config.Bind("General", "Cores To Unlock", 250, new ConfigDescription("How many yellow cores required to unlock 'Core Boost (Crushing)' in Tech Tree."));
         }
 
         private void CreateUnlock()
@@ -75,12 +75,12 @@ namespace CrusherCoreBoost
             EMUAdditions.AddNewUnlock(new NewUnlockDetails()
             {
                 displayName = UnlockDisplayName,
-                description = "Increase speed of all Crushers by 0.10% per Core Cluster.",
+                description = "Increase speed of all Crushers by 0.01% per Core Cluster.",
                 category = Unlock.TechCategory.Science,
                 requiredTier = TechTreeState.ResearchTier.Tier25,
                 coreTypeNeeded = ResearchCoreDefinition.CoreType.Gold,
                 coreCountNeeded = CoresToUnlock.Value,
-                dependencyNames = new System.Collections.Generic.List<string>() { EMU.Names.Unlocks.CoreBoosting },
+                dependencyNames = new System.Collections.Generic.List<string>() { EMU.Names.Unlocks.CoreBoostThreshing },
             });
         }
 
@@ -88,13 +88,14 @@ namespace CrusherCoreBoost
         {
             Unlock coreBoostCrusher = EMU.Unlocks.GetUnlockByName(UnlockDisplayName);
             coreBoostCrusher.requiredTier = EMU.Unlocks.GetUnlockByName(EMU.Names.Unlocks.CoreBoostAssembly).requiredTier;
-            coreBoostCrusher.treePosition = (int)EMU.Unlocks.GetUnlockByName(EMU.Names.Unlocks.GravelMixing).treePosition;
+            coreBoostCrusher.treePosition = (int)EMU.Unlocks.GetUnlockByName(EMU.Names.Unlocks.CoreBoostThreshing).treePosition;
             coreBoostCrusher.sprite = EMU.Resources.GetResourceInfoByName(EMU.Names.Resources.Crusher).rawSprite;
 
             Unlock unlock = EMU.Unlocks.GetUnlockByName(UnlockDisplayName);
             UnlockId = unlock.uniqueId;
         }
 
+#if DEBUG
         internal void LogIl(IEnumerable<CodeInstruction> instructions)
         {
             Logger.LogInfo("***** Logging IL START *****");
@@ -104,5 +105,6 @@ namespace CrusherCoreBoost
             }
             Logger.LogInfo("***** Logging IL END *****");
         }
+#endif
     }
 }

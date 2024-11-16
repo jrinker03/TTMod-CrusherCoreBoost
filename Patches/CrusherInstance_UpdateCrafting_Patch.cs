@@ -29,7 +29,7 @@ namespace CrusherCoreBoost.Patches
                 add
                 stfld float32 CrusherInstance::progress
             */
-            //  We want to change it to execute this instead: progress += dt * crusherSpeedMultiplier / currentRecipe.duration;
+            //  We want to change it to execute this instead: progress += dt * TechTreeStatePatches.crusherSpeedMultiplier / currentRecipe.duration;
 
             CodeMatcher codeMatcher = new CodeMatcher(instructions).Start();
             bool foundInsertPoint = false;

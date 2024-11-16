@@ -41,13 +41,13 @@ namespace CrusherCoreBoost.Patches
             if(TechTreeState.instance.IsUnlockActive(CrusherCoreBoostPlugin.UnlockId))
             {
                 // TechTreeState.freeCores was updated its HandleEndOfFrame so it will be current here.
-                freeCoresCrushing = (float)TechTreeState.instance.freeCores * 0.01f;
+                freeCoresCrushing = (float)TechTreeState.instance.freeCores * 0.001f;
 
 #if DEBUG
                 if (freeCoresCrushing != lastFreeCoresCrushing)
                 {
                     lastFreeCoresCrushing = freeCoresCrushing;
-                    CrusherCoreBoostPlugin.Instance.SharedLogger.LogInfo($"freeCoresCrushing updated to {freeCoresCrushing}");
+                    CrusherCoreBoostPlugin.Instance.SharedLogger.LogInfo($"freeCoresCrushing updated to {freeCoresCrushing}.");
                 }
 #endif
             }
