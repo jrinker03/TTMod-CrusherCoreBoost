@@ -81,8 +81,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
-        mkdir "D:\Steam\steamapps\common\Techtonica\BepInEx\plugins\$(TargetName)"
-        xcopy /q/y/i "$(TargetPath)" "D:\Steam\steamapps\common\Techtonica\BepInEx\plugins\$(TargetName)" /E /H /C
+        mkdir "$(GameInstalltionPath)\BepInEx\plugins\$(TargetName)"
+        xcopy /q/y/i "$(TargetPath)" "$(GameInstalltionPath)\BepInEx\plugins\$(TargetName)" /E /H /C
     </PostBuildEvent>
   </PropertyGroup>
 </Project>
