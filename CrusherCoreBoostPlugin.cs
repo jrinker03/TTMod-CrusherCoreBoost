@@ -5,6 +5,7 @@ using HarmonyLib;
 using EquinoxsModUtils;
 using EquinoxsModUtils.Additions;
 using System.Collections.Generic;
+using System;
 
 namespace CrusherCoreBoost
 {
@@ -13,7 +14,7 @@ namespace CrusherCoreBoost
     {
         private const string MyGUID = "com.jrinker03.CrusherCoreBoost";
         private const string PluginName = "CrusherCoreBoost";
-        private const string VersionString = "1.0.0";
+        private const string VersionString = "1.0.1";
         private const string UnlockDisplayName = "Core Boost (Crushing)";
 
         private static readonly Harmony Harmony = new Harmony(MyGUID);
@@ -59,6 +60,7 @@ namespace CrusherCoreBoost
             CreateUnlock();
 
             EMU.Events.GameDefinesLoaded += OnGameDefinesLoaded;
+            EMU.Events.SaveStateLoaded += OnSaveStateLoaded;
 
             Logger.LogInfo($"PluginName: {PluginName}, VersionString: {VersionString} is loaded.");
             Log = Logger;
@@ -87,12 +89,39 @@ namespace CrusherCoreBoost
         private void OnGameDefinesLoaded()
         {
             Unlock coreBoostCrusher = EMU.Unlocks.GetUnlockByName(UnlockDisplayName);
+            if (coreBoostCrusher == null)
+            {
+                Logger.LogError($"Unable to find unlock '{UnlockDisplayName}'.  Halting unlock setup.");
+            }
+
+            UnlockId = coreBoostCrusher.uniqueId;
+#if DEBUG
+            Logger.LogInfo($"Setting up unlock '{UnlockDisplayName}'. ID is {UnlockId}");
+#endif
             coreBoostCrusher.requiredTier = EMU.Unlocks.GetUnlockByName(EMU.Names.Unlocks.CoreBoostAssembly).requiredTier;
             coreBoostCrusher.treePosition = (int)EMU.Unlocks.GetUnlockByName(EMU.Names.Unlocks.CoreBoostThreshing).treePosition;
             coreBoostCrusher.sprite = EMU.Resources.GetResourceInfoByName(EMU.Names.Resources.Crusher).rawSprite;
+        }
 
-            Unlock unlock = EMU.Unlocks.GetUnlockByName(UnlockDisplayName);
-            UnlockId = unlock.uniqueId;
+        private void OnSaveStateLoaded(object sender, EventArgs e)
+        {
+            if(GameDefines.instance.unlocks.Count > UnlockId)
+            {
+                Logger.LogInfo($"Unlock {UnlockId} exists and is '{GameDefines.instance.unlocks[UnlockId].name}'");
+            }
+            else
+            {
+                Logger.LogError($"unlocks.Count < {UnlockId}");
+            }
+
+            if (TechTreeState.instance.unlockStates.Length > UnlockId)
+            {
+                Logger.LogInfo($"isActive = {TechTreeState.instance.unlockStates[UnlockId].isActive}");
+            }
+            else
+            {
+                Logger.LogError($"unlockStates.Length < {UnlockId}");
+            }
         }
 
 #if DEBUG

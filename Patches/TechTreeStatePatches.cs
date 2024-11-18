@@ -25,10 +25,13 @@ namespace CrusherCoreBoost.Patches
         [HarmonyPostfix]
         public static void HandleEndOfFrame_Postfix()
         {
-            if(TechTreeState.instance.IsUnlockActive(CrusherCoreBoostPlugin.UnlockId))
+            TechTreeState techTreeState = TechTreeState.instance;
+
+            if (techTreeState.unlockStates.Length > CrusherCoreBoostPlugin.UnlockId &&
+                techTreeState.IsUnlockActive(CrusherCoreBoostPlugin.UnlockId))
             {
                 // TechTreeState.freeCores was updated its HandleEndOfFrame so it will be current here.
-                freeCoresCrushing = (float)TechTreeState.instance.freeCores * 0.001f;
+                freeCoresCrushing = (float)techTreeState.freeCores * 0.001f;
             }
             else
             {
