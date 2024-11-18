@@ -86,23 +86,16 @@ namespace CrusherCoreBoost
 
         private void OnSaveStateLoaded(object sender, EventArgs e)
         {
-            if(GameDefines.instance.unlocks.Count > UnlockId)
-            {
-                Logger.LogInfo($"Unlock {UnlockId} exists and is '{GameDefines.instance.unlocks[UnlockId].name}'");
-            }
-            else
-            {
-                Logger.LogError($"unlocks.Count < {UnlockId}");
-            }
-
+#if DEBUG
             if (TechTreeState.instance.unlockStates.Length > UnlockId)
             {
-                Logger.LogInfo($"isActive = {TechTreeState.instance.unlockStates[UnlockId].isActive}");
+                Logger.LogInfo($"Core Boost (Crushing) isActive = {TechTreeState.instance.unlockStates[UnlockId].isActive}");
             }
             else
             {
                 Logger.LogError($"unlockStates.Length < {UnlockId}");
             }
+#endif
         }
 
 #if DEBUG
