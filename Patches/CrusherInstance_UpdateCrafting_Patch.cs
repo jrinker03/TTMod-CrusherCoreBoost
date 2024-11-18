@@ -62,12 +62,12 @@ namespace CrusherCoreBoost.Patches
 
             if (foundInsertPoint)
             {
-                CrusherCoreBoostPlugin.Instance.SharedLogger.LogInfo("CrusherInstance.UpdateCrafting() updated.");
+                CrusherCoreBoostPlugin.Log.LogInfo("CrusherInstance.UpdateCrafting() updated.");
                 instructions = codeMatcher.Instructions();
             }
             else
             {
-                CrusherCoreBoostPlugin.Instance.SharedLogger.LogError("Unable to update CrusherInstance.UpdateCrafting(). The code has likely changed.");
+                CrusherCoreBoostPlugin.Log.LogError("Unable to update CrusherInstance.UpdateCrafting(). The code has likely changed.");
             }
 
             return instructions;

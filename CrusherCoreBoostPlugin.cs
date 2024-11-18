@@ -14,7 +14,7 @@ namespace CrusherCoreBoost
     {
         private const string MyGUID = "com.jrinker03.CrusherCoreBoost";
         private const string PluginName = "CrusherCoreBoost";
-        private const string VersionString = "1.0.1";
+        private const string VersionString = "1.0.2";
         private const string UnlockDisplayName = "Core Boost (Crushing)";
 
         private static readonly Harmony Harmony = new Harmony(MyGUID);
@@ -26,25 +26,6 @@ namespace CrusherCoreBoost
         {
             get;
             private set;
-        }
-
-        public static CrusherCoreBoostPlugin Instance
-        {
-            get;
-            private set;
-        }
-
-        internal ManualLogSource SharedLogger
-        {
-            get
-            {
-                return Logger;
-            }
-        }
-
-        public CrusherCoreBoostPlugin()
-        {
-            Instance = this;
         }
 
         /// <summary>

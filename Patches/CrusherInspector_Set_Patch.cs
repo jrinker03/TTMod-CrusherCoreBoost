@@ -56,12 +56,12 @@ namespace CrusherCoreBoost.Patches
             // At the moment, the code has exactly three patterns and insertion points so ensure that we made the expected number of updates.
             if (matches == 3)
             {
-                CrusherCoreBoostPlugin.Instance.SharedLogger.LogInfo("CrusherInspector.Set() updated.");
+                CrusherCoreBoostPlugin.Log.LogInfo("CrusherInspector.Set() updated.");
                 instructions = codeMatcher.Instructions();
             }
             else
             {
-                CrusherCoreBoostPlugin.Instance.SharedLogger.LogError("Unable to update CrusherInspector.Set(). The code has likely changed.");
+                CrusherCoreBoostPlugin.Log.LogError("Unable to update CrusherInspector.Set(). The code has likely changed.");
             }
 
             return instructions;
